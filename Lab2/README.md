@@ -27,7 +27,18 @@ Processed data [here](./data/iot-temp-processed.csv)
 
 # A2.4 - Digital Health
 
+![Figure6](./fig/Figure_a24_1.png)
+Since the data is exponential, maybe something of the form n^(x-m), where n < 1; m > 1, log or sqrt seems to work fine to bring some values on each column.
+
+![Figure7](./fig/Figure_a24_2.png)
+The instructions are a bit unclear, not sure there is a linear dependency between "number of participants of a given trait" and "trait" (eg, 2 people are 60 years old); I think histogram looks a bit better. No legend applies the way I did it.
+
+![Figure8](./fig/Figure_a24_3.png)
+Users and different traits visualized. Not all users have the same amount of entries
+
+[Data here](./data/aw_fb_data-processed.csv)
+
 # A2.5 - Gone with the Wind!
 [Data here](./data/wind.csv)
 
-![Figure6](./fig/Figure_a25.png)
+![Figure10](./fig/Figure_a25.png)
