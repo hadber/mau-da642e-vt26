@@ -6,11 +6,11 @@ from torchvision import datasets
 
 # loading training data
 train_dataset = datasets.MNIST(
-    root="./data", train=True, transform=transforms.ToTensor(), download=True
+	root="./data", train=True, transform=transforms.ToTensor(), download=True
 )
 # loading test data
 test_dataset = datasets.MNIST(
-    root="./data", train=False, transform=transforms.ToTensor()
+	root="./data", train=False, transform=transforms.ToTensor()
 )
 
 batch_size = 32
@@ -23,27 +23,28 @@ input_size = 28 * 28
 output_size = 1
 
 model = nn.Sequential(nn.Linear(input_size, output_size), nn.Sigmoid())
+model.cuda()
 
-n_epochs = 100
+n_epochs = 40
 history = []
 loss_fn = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+optimizer = optim.Adam(model.parameters(), lr=0.01)
 
 for epoch in range(n_epochs):
-    for i, (images, labels) in enumerate(train_loader):
-        inputs = images.view(-1, input_size)
-        labels = labels.float()
-        y_pred = model(inputs)
-        loss = loss_fn(y_pred, labels)  # issue
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+	for i, (images, labels) in enumerate(train_loader):
+		inputs = images.view(-1, input_size).to(device='cuda')
+		labels = labels.float().to(device='cuda')
+		y_pred = model(inputs)
+		loss = loss_fn(y_pred, labels)  # issue
+		optimizer.zero_grad()
+		loss.backward()
+		optimizer.step()
 
-    model.eval()
-    for images, labels in test_loader:
-        y_pred = model(images.view(-1, 28 * 28))
-        mse = loss_fn(y_pred, labels)
-        mse = float(mse)
-        history.append(mse)
+	model.eval()
+	for images, labels in test_loader:
+		y_pred = model(images.view(-1, 28 * 28).to(device='cuda'))
+		mse = loss_fn(y_pred, labels.to(device='cuda'))
+		mse = float(mse)
+		history.append(mse)
 
-    print(f"Finished epoch {epoch}, latest MSE {history[-1]}")
+	print(f"Finished epoch {epoch}, latest MSE {history[-1]}")
